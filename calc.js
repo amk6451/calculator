@@ -6,40 +6,50 @@ const clear = document.querySelector(".clear");
 const equal = document.querySelector(".equal");
 const calcScreen = document.querySelector(".calcScreen");
 
-
-let displayValue = "0";
+let displayValue = "";
 let firstNum = "";
 let secondNum = "";
 let operator = "";
 
 
 numbers.forEach(number => {
+
     number.addEventListener("click", e => {
         if (operator === "") { 
-            // Read first number if no operator set yet
-            firstNum += e.target.innerText;
 
-            console.log(firstNum)
-        } else { // Read second number
+            // Set first number if no operator set yet
+            firstNum += e.target.innerText;
+            displayValue = firstNum;
+            console.log(firstNum);
+        } 
+        else { 
+            //Set second number
             secondNum += e.target.innerText;
+            displayValue = secondNum;
             console.log(secondNum)
         }
-        displayValue = firstNum + " " + operator + " " + secondNum;
         calcScreen.textContent = displayValue;
-        console.log(calcScreen);
-
     });
 });
 
 operators.forEach(op => {
     op.addEventListener("click", e => {
-        operator = e.target.innerText;
-        console.log(operator)
 
-        displayValue = firstNum + " " + operator + " " + secondNum;
-        calcScreen.textContent = displayValue;
-        console.log(calcScreen);
-        // If equals operator, perform operation
+        //Don't set operator if first term doesn't exist
+        if (firstNum == "") {
+            return
+        } 
+        
+        // Ex: [12 + 7] - 9; calculator evaluates pair of terms first before updating operator 
+        if (secondNum !== ""){
+            displayValue = operate(parseFloat(firstNum), parseFloat(secondNum), operator);
+            calcScreen.textContent = displayValue;
+            firstNum = displayValue;
+            secondNum = "";
+        }
+
+        operator = e.target.innerText;
+        // console.log(operator)
     });
 });
 
@@ -47,23 +57,41 @@ clear.addEventListener("click", e => {
     firstNum = "";
     secondNum = "";
     operator = "";
-    displayValue = "0";
+    displayValue = "";
+    calcScreen.textContent = displayValue;
 });
 
 equal.addEventListener("click", e => {
 
     console.log(firstNum);
     console.log(secondNum);
-    console.log(operator);
+    // console.log(displayValue);
+    // console.log(displayValue);
 
-    displayValue = operate(parseInt(firstNum), parseInt(secondNum), operator);
-    console.log(displayValue);
+    displayValue = operate(parseFloat(firstNum), parseFloat(secondNum), operator);
+    
+
+
 
     calcScreen.textContent = displayValue;
     firstNum = displayValue;
     secondNum = "";
     operator = "";
 
+})
+dot.addEventListener("click", e => {
+
+if(displayValue === firstNum && firstNum.includes(".") == false){
+    firstNum += e.target.innerText;
+    displayValue = firstNum;
+}
+
+if(displayValue === secondNum && secondNum.includes(".") == false){
+    secondNum += e.target.innerText;
+    displayValue = secondNum;
+}
+calcScreen.textContent = displayValue
+ 
 })
 
 
@@ -83,9 +111,15 @@ function multiply(num1, num2){
 };
 
 function divide(num1, num2){
-    console.log(num1/num2)
+      if (isFinite(num1/num2) == false) {
+        return "NaN";
+  }
+  else {
     return (num1/num2)
+  }
+
 };
+
 
 function operate(num1, num2, opChar){
     switch (opChar) 
