@@ -17,16 +17,14 @@ numbers.forEach(number => {
     number.addEventListener("click", e => {
         if (operator === "") { 
 
-            // Set first number if no operator set yet
+            // Sets firstNum if no operator is set yet
             firstNum += e.target.innerText;
             displayValue = firstNum;
-            console.log(firstNum);
         } 
         else { 
-            //Set second number
+            //Set secondNum
             secondNum += e.target.innerText;
             displayValue = secondNum;
-            console.log(secondNum)
         }
         calcScreen.textContent = displayValue;
     });
@@ -40,7 +38,7 @@ operators.forEach(op => {
             return
         } 
         
-        // Ex: [12 + 7] - 9; calculator evaluates pair of terms first before updating operator 
+        // Ex: [12 + 7] - 9; evaluates the first pair of terms before updating operator 
         if (secondNum !== ""){
             displayValue = operate(parseFloat(firstNum), parseFloat(secondNum), operator);
             calcScreen.textContent = displayValue;
@@ -49,7 +47,6 @@ operators.forEach(op => {
         }
 
         operator = e.target.innerText;
-        // console.log(operator)
     });
 });
 
@@ -63,50 +60,40 @@ clear.addEventListener("click", e => {
 
 equal.addEventListener("click", e => {
 
-    console.log(firstNum);
-    console.log(secondNum);
-    // console.log(displayValue);
-    // console.log(displayValue);
-
     displayValue = operate(parseFloat(firstNum), parseFloat(secondNum), operator);
-    
-
-
-
     calcScreen.textContent = displayValue;
     firstNum = displayValue;
     secondNum = "";
     operator = "";
 
 })
-dot.addEventListener("click", e => {
 
+dot.addEventListener("click", e => {
+//checks firstNum if there is a decimal already and adds one to term if not
 if(displayValue === firstNum && firstNum.includes(".") == false){
     firstNum += e.target.innerText;
     displayValue = firstNum;
 }
-
-if(displayValue === secondNum && secondNum.includes(".") == false){
+//checks if setting value to secondNum and if a decimal exists
+if(operator !== "" && secondNum.includes(".") == false)
+{
     secondNum += e.target.innerText;
     displayValue = secondNum;
 }
 calcScreen.textContent = displayValue
  
-})
+});
 
 
 function add(num1, num2){
-    console.log(num1+num2)
     return num1+num2
 };
 
 function subtract(num1, num2){
-    console.log(num1-num2)
     return num1-num2
 };
 
 function multiply(num1, num2){
-    console.log(num1*num2)
     return (num1*num2)
 };
 
@@ -117,7 +104,6 @@ function divide(num1, num2){
   else {
     return (num1/num2)
   }
-
 };
 
 
@@ -141,7 +127,7 @@ function operate(num1, num2, opChar){
             break;
 
           default:
-            console.log("default value");
+            // defaults to 0
             return 0
             break;
     };
